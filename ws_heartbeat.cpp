@@ -1,5 +1,3 @@
-// ws_heartbeat.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 #include <boost/beast/core.hpp>
 #include <boost/beast/core/ostream.hpp>
 #include <boost/beast/websocket.hpp>
@@ -28,13 +26,14 @@ void ThreadProcSession(tcp::socket& socket) {
         // Construct the stream by moving in the socket
         websocket::stream<tcp::socket> ws{ std::move(socket) };
 
-        // Accept the websocket handshake
+        // accept a new websocket connection
         ws.accept();
         std::cout << "incoming websocket client" << std::endl;
-        // Enable text option
+        
+        // enable text option
         ws.text(true);
 
-        // Create a timer
+        // Create a timer fired at every TIME_INTERVAL_MS which is 20 ms.
         boost::asio::io_context io;
         double time_wait = TIME_INTERVAL_MS;
 
@@ -61,14 +60,11 @@ void ThreadProcSession(tcp::socket& socket) {
             //ws.write(boost::asio::buffer(std::string("Hello from WebSocket Server")));
             //std::cout << boost::beast::buffers_to_string(buffer.data()) << std::endl;
         }
-
-    }
-    catch (boost::system::system_error const& se) {
+    } catch (boost::system::system_error const& se) {
         // This indicates that the session was closed
         if (se.code() != websocket::error::closed)
             std::cerr << "Error: " << se.code().message() << std::endl;
-    }
-    catch (std::exception const& e) {
+    } catch (std::exception const& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 }
@@ -106,8 +102,7 @@ int main(int argc, char* argv[]) {
                 &ThreadProcSession,
                 std::move(socket)) }.detach();
         }
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
