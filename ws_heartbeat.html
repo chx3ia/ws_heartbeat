@@ -1,6 +1,6 @@
 <!DOCTYPE html>
   <meta charset="utf-8" />
-  <title>WebSocket Test</title>
+  <title>WebSocket Client</title>
   <script language="javascript" type="text/javascript">
 
   var wsUri = "ws://127.0.0.1:8080/";
@@ -24,7 +24,6 @@
   function onOpen(evt)
   {
     writeToScreen("CONNECTED");
-    //doSend("WebSocket rocks");
   }
 
   function onClose(evt)
@@ -34,8 +33,6 @@
 
   function onMessage(evt)
   {
-    //writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
-    //websocket.close();
     console.log(evt.data);
   }
 
@@ -62,6 +59,6 @@
 
   </script>
 
-  <h2>WebSocket Test</h2>
+  <h2>WebSocket Client</h2>
 
   <div id="output"></div>
